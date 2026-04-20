@@ -209,13 +209,17 @@ Password=";
                 Z = fRole;
                 O = fName;
                 rdr.Close();
+                cmd = new MySqlCommand("SELECT SHA2(@pass, 512)", conn);
+                cmd.Parameters.AddWithValue("@pass", txtPass.Text.Trim());
+
+                string hashedInputPassword = cmd.ExecuteScalar().ToString();
                 if (txtLogin.Text == "" && txtPass.Text == "")
                 {
 
                 }
                 else
                 {
-                    if (fLogin != txtLogin.Text || fPassword != txtPass.Text)
+                    if (fLogin != txtLogin.Text || fPassword != hashedInputPassword)
                     {
                         MessageBox.Show("Неверный логин или пароль", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }

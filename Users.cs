@@ -112,8 +112,9 @@ namespace Praktika01Uvarov
         {
                 if (txtLLogin.Text != "SSSR")
                 {
-                    sqlCommand = $"INSERT INTO Users (fullName, username, PASSWORD, role_FK) VALUES ('{txtFIO.Text}', '{txtLLogin.Text}', '{txtPas.Text}', {RoleCombBox.SelectedValue.ToString()});";
+                    sqlCommand = $"INSERT INTO Users (fullName, username, PASSWORD, role_FK) VALUES ('{txtFIO.Text}', '{txtLLogin.Text}', SHA2(@pass, 512), {RoleCombBox.SelectedValue.ToString()});";
                     cmd = new(sqlCommand, conn);
+                    cmd.Parameters.AddWithValue("@pass", txtPas.Text.Trim().ToString());
                     cmd.ExecuteNonQuery();
                     fillTable();
                 }

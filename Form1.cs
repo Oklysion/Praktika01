@@ -16,6 +16,8 @@ namespace Praktika01Uvarov
         MySqlCommand cmd;
         MySqlDataReader rdr;
         public string sqlCommand;
+
+        private DynamicSearch searchManager;
         void AddVospPlan()
         {
             ThisPlanVospitat thisPlanVospitat = new ThisPlanVospitat();
@@ -436,6 +438,8 @@ JOIN Invited_participants ON Inviting_participants.fk_Code_player = Invited_part
                 conn.Open();
                 FIODayn.Text = OName;
 
+             // поиск   searchManager = new DynamicSearch(conn, dataGridView1);
+
                 if (Convert.ToInt32(ZRole) != 1 && Convert.ToInt32(ZRole) != 2)
                 {
                     // MessageBox.Show(Role);
@@ -814,7 +818,20 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-           
+            string searchText = txtSearch.Text.Trim();
+
+            // Для таблицы Educational_work_plan ищем по колонкам:
+            // The_direction_of_educational_work, EVENT, FIO_responsible_person
+            // поиск
+            /*searchManager.Search(
+                "Educational_work_plan",
+                new string[] {
+            "The_direction_of_educational_work",
+            "EVENT",
+            "FIO_responsible_person"
+                },
+                searchText
+            );*/
         }
     }
 }
