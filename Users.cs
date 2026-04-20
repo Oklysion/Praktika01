@@ -108,20 +108,51 @@ namespace Praktika01Uvarov
             }
         }
 
+        public bool ExportToFile(string filePath, string? database = null)
+        {
+            try
+            {
+                using var mySqlBackup = new MySqlBackup(conn.CreateCommand());
+                mySqlBackup.ExportInfo.AddCreateDatabase = true;
+                mySqlBackup.ExportToFile(filePath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка экспорта: {ex.Message}");
+                return false;
+            }
+        }
+
+        public bool ImportFromFile(string filePath)
+        {
+            try
+            {
+                using var mySqlBackup = new MySqlBackup(conn.CreateCommand());
+                mySqlBackup.ImportFromFile(filePath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка импорта: {ex.Message}");
+                return false;
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-                if (txtLLogin.Text != "SSSR")
-                {
-                    sqlCommand = $"INSERT INTO Users (fullName, username, PASSWORD, role_FK) VALUES ('{txtFIO.Text}', '{txtLLogin.Text}', SHA2(@pass, 512), {RoleCombBox.SelectedValue.ToString()});";
-                    cmd = new(sqlCommand, conn);
-                    cmd.Parameters.AddWithValue("@pass", txtPas.Text.Trim().ToString());
-                    cmd.ExecuteNonQuery();
-                    fillTable();
-                }
-                else
-                {
-                    MessageBox.Show($"Невозможно добавить пользователя: {SSSR}");
-                }
+            if (txtLLogin.Text != "SSSR")
+            {
+                sqlCommand = $"INSERT INTO Users (fullName, username, PASSWORD, role_FK) VALUES ('{txtFIO.Text}', '{txtLLogin.Text}', SHA2(@pass, 512), {RoleCombBox.SelectedValue.ToString()});";
+                cmd = new(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@pass", txtPas.Text.Trim().ToString());
+                cmd.ExecuteNonQuery();
+                fillTable();
+            }
+            else
+            {
+                MessageBox.Show($"Невозможно добавить пользователя: {SSSR}");
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -148,5 +179,86 @@ namespace Praktika01Uvarov
                 }
             }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using SaveFileDialog saveDialog = new SaveFileDialog
+            {
+                Filter = "SQL файлы (*.sql)|*.sql",
+                Title = "Выберите место сохранения резервной копии",
+                FileName = $"backup_{DateTime.Now:yyyyMMdd_HHmmss}.sql"
+            };
+            if (saveDialog.ShowDialog() == DialogResult.OK)
+            {
+                var result = MessageBox.Show(
+                    $"Вы уверены, что хотите создать резервную копию?\n\nПуть сохранения: {saveDialog.FileName}",
+                    "Подтверждение создания резервной копии",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    bool success = ExportToFile(saveDialog.FileName);
+
+                    if (success)
+                    {
+                        MessageBox.Show(
+                            "Резервная копия успешно создана!",
+                            "Успех",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "Произошла ошибка при создании резервной копии.",
+                            "Ошибка",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            using OpenFileDialog openDialog = new OpenFileDialog
+            {
+                Filter = "SQL файлы (*.sql)|*.sql",
+                Title = "Выберите файл резервной копии для восстановления"
+            };
+
+            if (openDialog.ShowDialog() == DialogResult.OK)
+            {
+                var result = MessageBox.Show(
+                    $"Вы уверены, что хотите восстановить базу данных из выбранной копии?\n\nФайл: {openDialog.FileName}\n\nВнимание: все текущие данные могут быть перезаписаны!",
+                    "Подтверждение восстановления",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    bool success = ImportFromFile(openDialog.FileName);
+
+                    if (success)
+                    {
+                        MessageBox.Show(
+                            "Восстановление завершено успешно!",
+                            "Успех",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "Произошла ошибка при восстановлении базы данных.",
+                            "Ошибка",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
     }
 }
+

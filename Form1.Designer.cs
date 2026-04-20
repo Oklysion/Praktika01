@@ -943,6 +943,7 @@
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(70, 21);
             toolStripMenuItem1.Text = "Отчёт";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // администрированиеToolStripMenuItem
             // 

@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI.Common;
 using Org.BouncyCastle.Utilities.Bzip2;
 using System.Data;
+using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
@@ -360,7 +361,7 @@ JOIN Invited_participants ON Inviting_participants.fk_Code_player = Invited_part
                 dataGridView1.Rows[i].Cells[2].Value = tbStud[i].edName;
                 dataGridView1.Rows[i].Cells[3].Value = tbStud[i].edDate;
                 dataGridView1.Rows[i].Cells[4].Value = tbStud[i].edOtvetst;
-                dataGridView1.Rows[i].Cells[5].Value = tbStud[i].edDateProved;
+                dataGridView1.Rows[i].Cells[5].Value = DateTime.Parse(tbStud[i].edDateProved).ToString("dd.MM.yyyy");
             }
         }
         void fillTable2()
@@ -378,7 +379,7 @@ JOIN Invited_participants ON Inviting_participants.fk_Code_player = Invited_part
                 dataGridView2.Rows[i].Cells[4].Value = tbStud2[i].evLocation;
                 dataGridView2.Rows[i].Cells[5].Value = tbStud2[i].evUsers;
                 dataGridView2.Rows[i].Cells[6].Value = tbStud2[i].evContent;
-                dataGridView2.Rows[i].Cells[7].Value = tbStud2[i].evDateEvent;
+                dataGridView2.Rows[i].Cells[7].Value = DateTime.Parse(tbStud2[i].evDateEvent).ToString("dd.MM.yyyy");
             }
         }
         void fillTable3()
@@ -438,11 +439,10 @@ JOIN Invited_participants ON Inviting_participants.fk_Code_player = Invited_part
                 conn.Open();
                 FIODayn.Text = OName;
 
-             // поиск   searchManager = new DynamicSearch(conn, dataGridView1);
+                // поиск   searchManager = new DynamicSearch(conn, dataGridView1);
 
                 if (Convert.ToInt32(ZRole) != 1 && Convert.ToInt32(ZRole) != 2)
                 {
-                    // MessageBox.Show(Role);
                     администрированиеToolStripMenuItem.Visible = false;
                 }
                 else
@@ -832,6 +832,118 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                 },
                 searchText
             );*/
+        }
+
+        private string GenerateHTMLReport()
+        {
+            StringBuilder html = new StringBuilder();
+
+           
+            html.AppendLine("<!DOCTYPE html>");
+            html.AppendLine("<html lang=\"ru\">");
+            html.AppendLine("<head>");
+            html.AppendLine("<meta charset=\"UTF-8\">");
+            html.AppendLine("<title>Отчёт куратора</title>");
+            html.AppendLine("<style>");
+
+            
+            html.AppendLine("body { font-family: 'Times New Roman', serif; font-size: 14pt; }");
+
+            html.AppendLine("table { border-collapse: collapse; width: 100%; }");
+            html.AppendLine("th, td { border: 1px solid #ddd; padding: 8px; }");
+            html.AppendLine("th { background-color: #f2f2f2; }");
+            html.AppendLine(".curator-info { margin-top: 30px; }");
+
+            html.AppendLine("</style>");
+            html.AppendLine("</head>");
+            html.AppendLine("<body>");
+
+            
+            string curatorFIO = "Не выбран";
+            string groupName = "Не выбрана";
+            string selectRabota = "Не выбрано";
+
+            if (dataGridView3.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGridView3.SelectedRows[0];
+                curatorFIO = selectedRow.Cells[1].Value?.ToString() ?? "Не указан";
+                groupName = selectedRow.Cells[2].Value?.ToString() ?? "Не указана";
+            }
+            if (dataGridView1.SelectedRows.Count > 0) 
+            {
+                var selectedRow = dataGridView1.SelectedRows[0];
+                selectRabota = selectedRow.Cells[3].Value?.ToString() ?? "Не указано";
+            }
+           
+            html.AppendLine($"Отчёт куратора {curatorFIO} группы {groupName} о проделанной работе с {selectRabota}");
+
+            html.AppendLine("<table>");
+            html.AppendLine("<thead>");
+            html.AppendLine("<tr><th>№</th><th>Название мероприятия</th><th>Дата проведения</th><th>Краткое содержание</th></tr>");
+            html.AppendLine("</thead>");
+            html.AppendLine("<tbody>");
+
+            foreach (DataGridViewRow row in dataGridView2.Rows)
+            {
+                if (row.IsNewRow)
+                    continue;
+
+                string eventGroupName = row.Cells[3].Value?.ToString() ?? "";
+
+                if (eventGroupName == groupName)
+                {
+                    html.AppendLine("<tr>");
+
+                    string col1 = row.Cells[1].Value?.ToString() ?? "";
+                    html.AppendLine("<td>" + col1 + "</td>");
+
+                    string col2 = row.Cells[2].Value?.ToString() ?? "";
+                    html.AppendLine("<td>" + col2 + "</td>");
+
+                    string col3 = row.Cells[7].Value?.ToString() ?? "";
+                    html.AppendLine("<td>" + col3 + "</td>");
+
+                    string col4 = row.Cells[6].Value?.ToString() ?? "";
+                    html.AppendLine("<td>" + col4 + "</td>");
+
+                    html.AppendLine("</tr>");
+                }
+            }
+
+            html.AppendLine("</tbody>");
+            html.AppendLine("</table>");
+
+            
+            html.AppendLine("<div class=\"curator-info\">");
+            html.AppendLine(@"Дополнительная информация о проведенной воспитательной работе: При этом еженедельно
+                              проводились беседы из цикла «Разговоры о важном» по следующим темам: 1. 165-летие со дня 
+                              рождения К.Э. Циолковского; 2. День пожилых людей; 3. День учителя; 4. День отца; 5. День
+                              музыки; 6. Россия — мировой лидер атомной отрасли; 7. День народного единства; 8. Мы разные,
+                              мы вместе; 9. День матери; 10. Символы России; 11. Волонтёры России; 12. День Конституции; 13.
+                              День Героев Отечества; 14. Новый год. Семейные праздники и мечты.");
+
+             
+            html.AppendLine("<pre>Куратор___________________\t\t\t\t\t\t\tПодпись___________________</pre>");
+            DateTime dateTime = DateTime.Now;
+            html.AppendLine("<p>" + dateTime.ToString("dd.MM.yyyy") + "</p>");
+
+            html.AppendLine("</body>");
+            html.AppendLine("</html>");
+
+            return html.ToString();
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string htmlContent = GenerateHTMLReport();
+            string filePath = @"Report.html"; // Укажите путь к файлу
+
+            using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
+            {
+                writer.Write(htmlContent);
+            }
+
+            MessageBox.Show("Отчёт сохранён в " + filePath);
         }
     }
 }

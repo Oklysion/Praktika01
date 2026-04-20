@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             dataGridView1 = new DataGridView();
+            id_user = new DataGridViewTextBoxColumn();
+            DTLogin = new DataGridViewTextBoxColumn();
+            RoleUser = new DataGridViewTextBoxColumn();
             txtLogin = new Label();
             txtPassw = new Label();
             txtRole = new Label();
@@ -39,9 +42,8 @@
             button2 = new Button();
             label4 = new Label();
             txtFIO = new TextBox();
-            id_user = new DataGridViewTextBoxColumn();
-            DTLogin = new DataGridViewTextBoxColumn();
-            RoleUser = new DataGridViewTextBoxColumn();
+            button3 = new Button();
+            button4 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -58,6 +60,27 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(247, 305);
             dataGridView1.TabIndex = 0;
+            // 
+            // id_user
+            // 
+            id_user.HeaderText = "id_user";
+            id_user.Name = "id_user";
+            id_user.ReadOnly = true;
+            id_user.Visible = false;
+            // 
+            // DTLogin
+            // 
+            DTLogin.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            DTLogin.HeaderText = "Логин";
+            DTLogin.Name = "DTLogin";
+            DTLogin.ReadOnly = true;
+            // 
+            // RoleUser
+            // 
+            RoleUser.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            RoleUser.HeaderText = "Статус";
+            RoleUser.Name = "RoleUser";
+            RoleUser.ReadOnly = true;
             // 
             // txtLogin
             // 
@@ -113,6 +136,7 @@
             // 
             // button1
             // 
+            button1.FlatStyle = FlatStyle.Flat;
             button1.Location = new Point(265, 288);
             button1.Name = "button1";
             button1.Size = new Size(156, 29);
@@ -123,6 +147,7 @@
             // 
             // button2
             // 
+            button2.FlatStyle = FlatStyle.Flat;
             button2.Location = new Point(430, 288);
             button2.Name = "button2";
             button2.Size = new Size(156, 29);
@@ -148,32 +173,35 @@
             txtFIO.Size = new Size(260, 23);
             txtFIO.TabIndex = 10;
             // 
-            // id_user
+            // button3
             // 
-            id_user.HeaderText = "id_user";
-            id_user.Name = "id_user";
-            id_user.ReadOnly = true;
-            id_user.Visible = false;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Location = new Point(430, 183);
+            button3.Name = "button3";
+            button3.Size = new Size(113, 76);
+            button3.TabIndex = 11;
+            button3.Text = "Резервоне копирование";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
-            // DTLogin
+            // button4
             // 
-            DTLogin.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            DTLogin.HeaderText = "Логин";
-            DTLogin.Name = "DTLogin";
-            DTLogin.ReadOnly = true;
-            // 
-            // RoleUser
-            // 
-            RoleUser.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            RoleUser.HeaderText = "Статус";
-            RoleUser.Name = "RoleUser";
-            RoleUser.ReadOnly = true;
+            button4.FlatStyle = FlatStyle.Flat;
+            button4.Location = new Point(308, 183);
+            button4.Name = "button4";
+            button4.Size = new Size(113, 76);
+            button4.TabIndex = 12;
+            button4.Text = "Восстановление ";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // Users
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(598, 337);
+            Controls.Add(button4);
+            Controls.Add(button3);
             Controls.Add(txtFIO);
             Controls.Add(label4);
             Controls.Add(button2);
@@ -211,5 +239,7 @@
         private DataGridViewTextBoxColumn id_user;
         private DataGridViewTextBoxColumn DTLogin;
         private DataGridViewTextBoxColumn RoleUser;
+        private Button button3;
+        private Button button4;
     }
 }
