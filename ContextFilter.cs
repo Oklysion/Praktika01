@@ -9,11 +9,10 @@ namespace ArchiveFund
         private static DataGridView? _grid;
         private static Dictionary<int, object> _activeFilters = new Dictionary<int, object>();
         private static ToolStripMenuItem? _parentMenuItem;
-        public static void resetfilter()
+        public static void ResetFilter(DataGridView grid, ToolStripMenuItem parentMenuItem)
         {
-            _grid = null;
             _activeFilters = new Dictionary<int, object>();
-            _parentMenuItem = null;
+            CreateFilterContextMenu(grid, parentMenuItem);
         }
         public static void CreateFilterContextMenu(DataGridView grid, ToolStripMenuItem parentMenuItem)
         {
@@ -39,7 +38,8 @@ namespace ArchiveFund
 
                 var uniqueValues = GetUniqueColumnValues(grid, colIndex);
                 var columnMenu = new ToolStripMenuItem(column.HeaderText);
-
+                if (uniqueValues.Count >= grid.RowCount)
+                    columnMenu.Visible = false;
                 // Подсветка колонки, если есть активный фильтр
                 if (_activeFilters.ContainsKey(colIndex))
                     columnMenu.BackColor = Color.LightGreen;
@@ -72,6 +72,9 @@ namespace ArchiveFund
 
                     columnMenu.DropDownItems.Add(item);
                 }
+                if (parentMenuItem.DropDownItems.Count <= 3)
+                    parentMenuItem.Visible = false;
+                else parentMenuItem.Visible = true;
             }
         }
 

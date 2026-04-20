@@ -3,6 +3,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI.Common;
 using Org.BouncyCastle.Utilities.Bzip2;
+using System.Data;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
@@ -407,6 +408,7 @@ JOIN Invited_participants ON Inviting_participants.fk_Code_player = Invited_part
                 dataGridView4.Rows[i].Cells[5].Value = tbStud4[i].invOrgName;
             }
         }
+
         public Form1(string ZRole, string OName)
         {
             InitializeComponent();
@@ -723,8 +725,7 @@ JOIN Invited_participants ON Inviting_participants.fk_Code_player = Invited_part
             cmd = new MySqlCommand(sqlCommand, conn);
             cmd.ExecuteNonQuery();
             fillTable4();
-            ContextFilter.resetfilter();
-            ContextFilter.CreateFilterContextMenu(dataGridView4, contextFilterItem);
+            ContextFilter.ResetFilter(dataGridView4, contextFilterItem);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -733,8 +734,7 @@ JOIN Invited_participants ON Inviting_participants.fk_Code_player = Invited_part
             cmd = new MySqlCommand(sqlCommand, conn);
             cmd.ExecuteNonQuery();
             fillTable();
-            ContextFilter.resetfilter();
-            ContextFilter.CreateFilterContextMenu(dataGridView1, contextFilterItem);
+            ContextFilter.ResetFilter(dataGridView1, contextFilterItem);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -745,8 +745,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             cmd = new MySqlCommand(sqlCommand, conn);
             cmd.ExecuteNonQuery();
             fillTable2();
-            ContextFilter.resetfilter();
-            ContextFilter.CreateFilterContextMenu(dataGridView2, contextFilterItem);
+            ContextFilter.ResetFilter(dataGridView2, contextFilterItem);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -755,8 +754,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             cmd = new MySqlCommand(sqlCommand, conn);
             cmd.ExecuteNonQuery();
             fillTable3();
-            ContextFilter.resetfilter();
-            ContextFilter.CreateFilterContextMenu(dataGridView3, contextFilterItem);
+            ContextFilter.ResetFilter(dataGridView3, contextFilterItem);
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -805,13 +803,18 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                     int indRow = dataGridView4.CurrentRow.Index;
                     int idNumberPlan = Convert.ToInt32(dataGridView4.Rows[indRow].Cells[0].Value);
                     int idPlayer = Convert.ToInt32(dataGridView4.Rows[indRow].Cells[1].Value);
-                    sqlCommand = $"DELETE FROM Invited_participants WHERE Code_player = '{idPlayer.ToString()}'";
+                    sqlCommand = $"DELETE FROM Invited_participants WHERE Code_player = '{idPlayer.ToString()}';";
                     sqlCommand = $"DELETE FROM Inviting_participants WHERE fk_Number_plan = '{idNumberPlan.ToString()}' AND fk_Code_player = '{idPlayer.ToString()}'";
                     cmd = new(sqlCommand, conn);
                     cmd.ExecuteNonQuery();
                     fillTable4();
                 }
             }
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+           
         }
     }
 }

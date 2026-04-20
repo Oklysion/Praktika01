@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            textBox1 = new TextBox();
+            txtSearch = new TextBox();
             dataGridView1 = new DataGridView();
             IDNumber = new DataGridViewTextBoxColumn();
             Направление = new DataGridViewTextBoxColumn();
@@ -42,6 +42,8 @@
             EditPlan = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             DeletePlan = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            contextFilterItem = new ToolStripMenuItem();
             tabControl1 = new TabControl();
             PlanRabot = new TabPage();
             pictureBox4 = new PictureBox();
@@ -106,8 +108,6 @@
             администрированиеToolStripMenuItem = new ToolStripMenuItem();
             оПрограммеToolStripMenuItem = new ToolStripMenuItem();
             FIODayn = new Label();
-            contextFilterItem = new ToolStripMenuItem();
-            toolStripSeparator2 = new ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             AddEditDelete.SuspendLayout();
             tabControl1.SuspendLayout();
@@ -137,13 +137,14 @@
             GLMenu.SuspendLayout();
             SuspendLayout();
             // 
-            // textBox1
+            // txtSearch
             // 
-            textBox1.Location = new Point(2, 27);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Поиск";
-            textBox1.Size = new Size(794, 23);
-            textBox1.TabIndex = 0;
+            txtSearch.Location = new Point(2, 27);
+            txtSearch.Name = "txtSearch";
+            txtSearch.PlaceholderText = "Поиск";
+            txtSearch.Size = new Size(794, 23);
+            txtSearch.TabIndex = 0;
+            txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // dataGridView1
             // 
@@ -208,7 +209,7 @@
             AddEditDelete.Items.AddRange(new ToolStripItem[] { AddPlan, EditPlan, toolStripSeparator1, DeletePlan, toolStripSeparator2, contextFilterItem });
             AddEditDelete.Name = "contextMenuStrip1";
             AddEditDelete.RenderMode = ToolStripRenderMode.Professional;
-            AddEditDelete.Size = new Size(181, 126);
+            AddEditDelete.Size = new Size(155, 104);
             // 
             // AddPlan
             // 
@@ -217,7 +218,7 @@
             AddPlan.Image = Properties.Resources._1490129329_rounded38_82203;
             AddPlan.ImageTransparentColor = Color.White;
             AddPlan.Name = "AddPlan";
-            AddPlan.Size = new Size(180, 22);
+            AddPlan.Size = new Size(154, 22);
             AddPlan.Text = "Добавить";
             AddPlan.Click += AddPlan_Click;
             // 
@@ -227,7 +228,7 @@
             EditPlan.Image = Properties.Resources._353430_checkbox_edit_pen_pencil_107516;
             EditPlan.ImageTransparentColor = Color.White;
             EditPlan.Name = "EditPlan";
-            EditPlan.Size = new Size(180, 22);
+            EditPlan.Size = new Size(154, 22);
             EditPlan.Text = "Редактировать";
             EditPlan.Click += EditPlan_Click;
             // 
@@ -235,7 +236,7 @@
             // 
             toolStripSeparator1.BackColor = Color.Transparent;
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(177, 6);
+            toolStripSeparator1.Size = new Size(151, 6);
             // 
             // DeletePlan
             // 
@@ -243,9 +244,21 @@
             DeletePlan.Image = Properties.Resources.waste_bin_delete_remove_recycle_icon_123840;
             DeletePlan.ImageTransparentColor = Color.White;
             DeletePlan.Name = "DeletePlan";
-            DeletePlan.Size = new Size(180, 22);
+            DeletePlan.Size = new Size(154, 22);
             DeletePlan.Text = "Удалить ";
             DeletePlan.Click += DeletePlan_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(151, 6);
+            // 
+            // contextFilterItem
+            // 
+            contextFilterItem.Image = Properties.Resources.free_icon_filter_2676824;
+            contextFilterItem.Name = "contextFilterItem";
+            contextFilterItem.Size = new Size(154, 22);
+            contextFilterItem.Text = "Фильтр";
             // 
             // tabControl1
             // 
@@ -958,18 +971,6 @@
             FIODayn.Size = new Size(0, 17);
             FIODayn.TabIndex = 10;
             // 
-            // contextFilterItem
-            // 
-            contextFilterItem.Image = Properties.Resources.free_icon_filter_2676824;
-            contextFilterItem.Name = "contextFilterItem";
-            contextFilterItem.Size = new Size(180, 22);
-            contextFilterItem.Text = "Фильтр";
-            // 
-            // toolStripSeparator2
-            // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(177, 6);
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -978,7 +979,7 @@
             Controls.Add(FIODayn);
             Controls.Add(GLMenu);
             Controls.Add(tabControl1);
-            Controls.Add(textBox1);
+            Controls.Add(txtSearch);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             MainMenuStrip = GLMenu;
             Name = "Form1";
@@ -1020,7 +1021,7 @@
 
         #endregion
 
-        private TextBox textBox1;
+        private TextBox txtSearch;
         private DataGridView dataGridView1;
         private TabControl tabControl1;
         private TabPage PlanRabot;

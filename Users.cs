@@ -119,7 +119,7 @@ namespace Praktika01Uvarov
                 }
                 else
                 {
-                    MessageBox.Show($"Невозможно удалить пользователя: {SSSR}");
+                    MessageBox.Show($"Невозможно добавить пользователя: {SSSR}");
                 }
         }
 
