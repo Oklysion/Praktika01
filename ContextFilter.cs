@@ -38,13 +38,13 @@ namespace ArchiveFund
 
                 var uniqueValues = GetUniqueColumnValues(grid, colIndex);
                 var columnMenu = new ToolStripMenuItem(column.HeaderText);
-                if (uniqueValues.Count >= grid.RowCount)
-                    columnMenu.Visible = false;
+
                 // Подсветка колонки, если есть активный фильтр
                 if (_activeFilters.ContainsKey(colIndex))
                     columnMenu.BackColor = Color.LightGreen;
+                if (uniqueValues.Count < grid.RowCount)
+                    parentMenuItem.DropDownItems.Add(columnMenu);
 
-                parentMenuItem.DropDownItems.Add(columnMenu);
 
                 // Пункт "Все"
                 var allItem = new ToolStripMenuItem("Все");
@@ -60,7 +60,7 @@ namespace ArchiveFund
                 // Пункты для уникальных значений
                 foreach (var value in uniqueValues)
                 {
-                    var display = value?.ToString() ?? "(пусто)";
+                    var display = string.IsNullOrWhiteSpace(value?.ToString()) ? "(пусто)" : value?.ToString();
                     var item = new ToolStripMenuItem(display);
                     int capturedCol = colIndex;
                     object? capturedValue = value;
@@ -72,7 +72,7 @@ namespace ArchiveFund
 
                     columnMenu.DropDownItems.Add(item);
                 }
-                if (parentMenuItem.DropDownItems.Count <= 3)
+                if (parentMenuItem.DropDownItems.Count <= 2)
                     parentMenuItem.Visible = false;
                 else parentMenuItem.Visible = true;
             }
