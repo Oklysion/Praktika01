@@ -130,6 +130,7 @@
             txtKratko.Location = new Point(12, 281);
             txtKratko.Multiline = true;
             txtKratko.Name = "txtKratko";
+            txtKratko.PlaceholderText = "Краткое содержание мероприятия";
             txtKratko.Size = new Size(330, 85);
             txtKratko.TabIndex = 12;
             // 
@@ -137,6 +138,7 @@
             // 
             txtOsn.Location = new Point(12, 217);
             txtOsn.Name = "txtOsn";
+            txtOsn.PlaceholderText = "Основные участники";
             txtOsn.Size = new Size(330, 23);
             txtOsn.TabIndex = 13;
             // 
@@ -144,6 +146,7 @@
             // 
             txtMesto.Location = new Point(12, 160);
             txtMesto.Name = "txtMesto";
+            txtMesto.PlaceholderText = "Место проведения";
             txtMesto.Size = new Size(330, 23);
             txtMesto.TabIndex = 14;
             // 

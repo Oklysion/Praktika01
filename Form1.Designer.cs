@@ -108,6 +108,10 @@
             администрированиеToolStripMenuItem = new ToolStripMenuItem();
             оПрограммеToolStripMenuItem = new ToolStripMenuItem();
             FIODayn = new Label();
+            toolStrip1 = new ToolStrip();
+            fullNameUSER = new ToolStripLabel();
+            toolStripSeparator3 = new ToolStripSeparator();
+            DateTS = new ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             AddEditDelete.SuspendLayout();
             tabControl1.SuspendLayout();
@@ -135,6 +139,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox11).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
             GLMenu.SuspendLayout();
+            toolStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // txtSearch
@@ -465,6 +470,7 @@
             button11.TabIndex = 7;
             button11.Text = "Удалить";
             button11.UseVisualStyleBackColor = false;
+            button11.Click += button11_Click;
             button11.MouseEnter += button11_MouseEnter;
             button11.MouseLeave += button11_MouseLeave;
             // 
@@ -526,6 +532,7 @@
             dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView2.Size = new Size(792, 272);
             dataGridView2.TabIndex = 2;
+            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
             // 
             // EventIDGroup
             // 
@@ -972,11 +979,44 @@
             FIODayn.Size = new Size(0, 17);
             FIODayn.TabIndex = 10;
             // 
+            // toolStrip1
+            // 
+            toolStrip1.BackColor = Color.White;
+            toolStrip1.Dock = DockStyle.Bottom;
+            toolStrip1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            toolStrip1.ImeMode = ImeMode.NoControl;
+            toolStrip1.Items.AddRange(new ToolStripItem[] { fullNameUSER, toolStripSeparator3, DateTS });
+            toolStrip1.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            toolStrip1.Location = new Point(0, 446);
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.RightToLeft = RightToLeft.No;
+            toolStrip1.Size = new Size(800, 25);
+            toolStrip1.Stretch = true;
+            toolStrip1.TabIndex = 11;
+            toolStrip1.Text = "toolStrip1";
+            // 
+            // fullNameUSER
+            // 
+            fullNameUSER.Name = "fullNameUSER";
+            fullNameUSER.Size = new Size(0, 22);
+            // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(6, 25);
+            // 
+            // DateTS
+            // 
+            DateTS.Name = "DateTS";
+            DateTS.RightToLeft = RightToLeft.No;
+            DateTS.Size = new Size(0, 22);
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(800, 471);
+            Controls.Add(toolStrip1);
             Controls.Add(FIODayn);
             Controls.Add(GLMenu);
             Controls.Add(tabControl1);
@@ -1016,6 +1056,8 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView4).EndInit();
             GLMenu.ResumeLayout(false);
             GLMenu.PerformLayout();
+            toolStrip1.ResumeLayout(false);
+            toolStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1048,10 +1090,6 @@
         private Button button14;
         private Button button15;
         private Button button16;
-        private PictureBox pictureBox3;
-        private PictureBox pictureBox2;
-        private PictureBox pictureBox4;
-        private PictureBox pictureBox1;
         private PictureBox pictureBox8;
         private PictureBox pictureBox7;
         private PictureBox pictureBox6;
@@ -1101,5 +1139,13 @@
         private DataGridViewTextBoxColumn ДатапроведенияИвент;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem contextFilterItem;
+        private ToolStrip toolStrip1;
+        private ToolStripLabel fullNameUSER;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripLabel DateTS;
+        private PictureBox pictureBox4;
+        private PictureBox pictureBox3;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox1;
     }
 }

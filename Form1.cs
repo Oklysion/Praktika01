@@ -3,6 +3,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI.Common;
 using Org.BouncyCastle.Utilities.Bzip2;
+using System;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
@@ -18,81 +19,117 @@ namespace Praktika01Uvarov
         MySqlDataReader rdr;
         public string sqlCommand;
 
-        private DynamicSearch searchManager;
-        void AddVospPlan()
+        public static Form1 Instance;
+
+        void InfoEvent()
         {
-            ThisPlanVospitat thisPlanVospitat = new ThisPlanVospitat();
-            if (thisPlanVospitat.ShowDialog() == DialogResult.OK)
+            sqlCommand = @"SELECT fk_Number_plan, fk_Group_Code, Educational_work_plan.`EVENT` AS 'Мероприятие', `group`.Group_Name AS 'Группа', Event_Location AS 'Место проведения', The_main_participants AS 'Участники', Event_content 'Содержание мероприятия', Date_Event AS 'Дата проведения' FROM `Event` 
+JOIN `group` ON `group`.Group_code = `Event`.fk_Group_Code 
+JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Number_plan;";
+            cmd = new MySqlCommand(sqlCommand, conn);
+            cmd.ExecuteNonQuery();
+            fillTable2();
+            ContextFilter.ResetFilter(dataGridView2, contextFilterItem);
+        }
+        
+       public void AddVospPlan()
+        {
+            try
             {
-                if (thisPlanVospitat.txtNaprav.Text != "" || thisPlanVospitat.txtNazvan.Text != "" || thisPlanVospitat.txtSroki.Text != "" || thisPlanVospitat.txtFIOOtvet.Text != "")
+                ThisPlanVospitat thisPlanVospitat = new ThisPlanVospitat();
+                if (thisPlanVospitat.ShowDialog() == DialogResult.OK)
                 {
-                    sqlCommand = @"INSERT INTO Educational_work_plan (The_direction_of_educational_work, Educational_work_plan.`EVENT`, Dates_event, FIO_responsible_person, A_note_about_the_event)
+                    if (thisPlanVospitat.txtNaprav.Text == "" || thisPlanVospitat.txtNazvan.Text == "" || thisPlanVospitat.txtSroki.Text == "" || thisPlanVospitat.txtFIOOtvet.Text == "" || thisPlanVospitat.txtNaprav.Text == " " || thisPlanVospitat.txtNazvan.Text == " " || thisPlanVospitat.txtSroki.Text == " " || thisPlanVospitat.txtFIOOtvet.Text == " ")
+                    {
+                        MessageBox.Show("Заполните поля.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        AddVospPlan();
+                    }
+                    else
+                    {
+                        sqlCommand = @"INSERT INTO Educational_work_plan (The_direction_of_educational_work, Educational_work_plan.`EVENT`, Dates_event, FIO_responsible_person, A_note_about_the_event)
                 VALUES ('" + thisPlanVospitat.txtNaprav.Text + "', '" + thisPlanVospitat.txtNazvan.Text + "', '" + thisPlanVospitat.txtSroki.Text + "', '" + thisPlanVospitat.txtFIOOtvet.Text + "', '" + thisPlanVospitat.dtTashkent.Value.ToString("yyyy-MM-dd") + "');";
-                    cmd = new MySqlCommand(sqlCommand, conn);
-                    cmd.ExecuteNonQuery();
-                    fillTable();
-                }
-                else
-                {
-                    MessageBox.Show("Заполните поля для ввода!");
-                    thisPlanVospitat.ShowDialog();
+                        cmd = new MySqlCommand(sqlCommand, conn);
+                        cmd.ExecuteNonQuery();
+                        fillTable();
+                    }
                 }
             }
+            catch { }
         }
-        void AddEvents()
+       public void AddEvents()
         {
+            try { 
             Events events = new Events();
-            if (events.ShowDialog() == DialogResult.OK)
-            {
-                string disableFK = "SET FOREIGN_KEY_CHECKS=0;";
-                MySqlCommand cmdFK = new MySqlCommand(disableFK, conn);
-                cmdFK.ExecuteNonQuery();
-
-                sqlCommand = @"INSERT INTO `Event` (fk_Number_plan, fk_Group_Code, Event_Location, The_main_participants, Event_content, Date_Event) 
+                if (events.ShowDialog() == DialogResult.OK)
+                {
+                    if (events.NameCB.SelectedItem == "" || events.NameCB.SelectedItem == " " || events.EventNameCB.SelectedItem == "" || events.EventNameCB.SelectedItem == " " || events.txtMesto.Text == " " || events.txtMesto.Text == " " || events.txtOsn.Text == "" || events.txtOsn.Text == " " || events.txtKratko.Text == "" || events.txtKratko.Text == " ")
+                    {
+                        MessageBox.Show("Заполните поля.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        AddEvents();
+                    }
+                    else
+                    {
+                        sqlCommand = @"INSERT INTO `Event` (fk_Number_plan, fk_Group_Code, Event_Location, The_main_participants, Event_content, Date_Event) 
                 VALUES (' " + events.NameCB.SelectedValue + "', '" + events.EventNameCB.SelectedValue + "', '" + events.txtMesto.Text + "', '" + events.txtOsn.Text + "', '" + events.txtKratko.Text + "', '" + events.dtDate.Value.ToString("yyyy-MM-dd") + "');";
-                cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.ExecuteNonQuery();
-                fillTable2();
-
-                string enableFK = "SET FOREIGN_KEY_CHECKS=1;";
-                MySqlCommand cmdFK2 = new MySqlCommand(enableFK, conn);
-                cmdFK2.ExecuteNonQuery();
+                        cmd = new MySqlCommand(sqlCommand, conn);
+                        cmd.ExecuteNonQuery();
+                        fillTable2();
+                    }
+                }
             }
+            catch { }
         }
-        void AddGroups()
+       public void AddGroups()
         {
-            Groups groups = new Groups();
-            if (groups.ShowDialog() == DialogResult.OK)
+            try
             {
-                if (groups.txtFIO.Text != "" || groups.txtNameGroup.Text != "")
+                Groups groups = new Groups();
+                if (groups.ShowDialog() == DialogResult.OK)
                 {
-                    sqlCommand = @"INSERT INTO `group` (FIO_curator, Group_Name)
+                    if (groups.txtFIO.Text == "" || groups.txtNameGroup.Text == "")
+                    {
+                        MessageBox.Show("Заполните поля.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        AddGroups();
+                    }
+                    else
+                    {
+                        sqlCommand = @"INSERT INTO `group` (FIO_curator, Group_Name)
                 VALUES ('" + groups.txtFIO.Text + "', '" + groups.txtNameGroup.Text + "');";
-                    cmd = new MySqlCommand(sqlCommand, conn);
-                    cmd.ExecuteNonQuery();
-                    fillTable3();
-                }
-                else
-                {
-                    MessageBox.Show("Заполните поля для ввода!");
+                        cmd = new MySqlCommand(sqlCommand, conn);
+                        cmd.ExecuteNonQuery();
+                        fillTable3();
+                    }
                 }
             }
+            catch { }
         }
-        void AddInvited()
+       public void AddInvited()
         {
-            AddInvitedPeople addInvitedPeople = new AddInvitedPeople();
-            if (addInvitedPeople.ShowDialog() == DialogResult.OK)
+            try
             {
-                sqlCommand = @"INSERT INTO Invited_participants (FIO_invited, Post, Org_name)
+                AddInvitedPeople addInvitedPeople = new AddInvitedPeople();
+                if (addInvitedPeople.ShowDialog() == DialogResult.OK)
+                {
+                    if (addInvitedPeople.txtFIO.Text == "" || addInvitedPeople.txtFIO.Text == " " || addInvitedPeople.txtPost.Text == "" || addInvitedPeople.txtPost.Text == " " || addInvitedPeople.txtOrgName.Text == "" || addInvitedPeople.txtOrgName.Text == " " || addInvitedPeople.EventsCB.SelectedItem == " " || addInvitedPeople.EventsCB.SelectedItem == "")
+                    {
+                        MessageBox.Show("Заполните поля.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        AddInvited();
+                    }
+                    else
+                    {
+                        sqlCommand = @"INSERT INTO Invited_participants (FIO_invited, Post, Org_name)
                 VALUES ('" + addInvitedPeople.txtFIO.Text + "', '" + addInvitedPeople.txtPost.Text + "', '" + addInvitedPeople.txtOrgName.Text + "');";
-                cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.ExecuteNonQuery();
-                sqlCommand = @"INSERT INTO Inviting_participants (fk_Number_plan, fk_Code_player)
+                        cmd = new MySqlCommand(sqlCommand, conn);
+                        cmd.ExecuteNonQuery();
+                        sqlCommand = @"INSERT INTO Inviting_participants (fk_Number_plan, fk_Code_player)
                 VALUES ( " + addInvitedPeople.EventsCB.SelectedValue + ", " + "LAST_INSERT_ID())";
-                cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.ExecuteNonQuery();
-                fillTable4();
+                        cmd = new MySqlCommand(sqlCommand, conn);
+                        cmd.ExecuteNonQuery();
+                        fillTable4();
+                    }
+                }
             }
+            catch { }
         }
         void EditInvited()
         {
@@ -130,7 +167,7 @@ namespace Praktika01Uvarov
                 }
             }
         }
-        void EditGroup()
+        public void EditGroup()
         {
             if (dataGridView3.RowCount == 0)
             {
@@ -234,11 +271,137 @@ namespace Praktika01Uvarov
         }
         void DeleteVospPlan()
         {
+            try
+            {
+                if (dataGridView1.RowCount == 0)
+                {
+                    MessageBox.Show("Нечего удалять");
+                }
+                else
+                {
+                    DialogResult result = MessageBox.Show(
+                        "Вы действительно хотите удалить запись?",
+                        "Удаление записей",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        InfoEvent();
 
+                        int indRow = dataGridView1.CurrentRow.Index;
+                        int idNumberPlan = Convert.ToInt32(dataGridView1.Rows[indRow].Cells[0].Value);
+                        if (dataGridView2.RowCount != 0 && dataGridView4.RowCount != 0)
+                        {
+                            int idNumberPlanEvent = Convert.ToInt32(dataGridView2.Rows[indRow].Cells["EventIDNumber"].Value);
+                            sqlCommand = $"DELETE FROM `event` WHERE fk_Number_plan = {idNumberPlanEvent.ToString()};";
+                            cmd = new(sqlCommand, conn);
+                            cmd.ExecuteNonQuery();
+                            fillTable2();
+                            sqlCommand = $"DELETE FROM `inviting_participants` WHERE fk_Number_plan = {idNumberPlan.ToString()};";
+                            cmd = new(sqlCommand, conn);
+                            cmd.ExecuteNonQuery();
+                        }
+                        else
+                        {
+                            sqlCommand = $"DELETE FROM Educational_work_plan WHERE Number_plan = {idNumberPlan.ToString()}";
+                            cmd = new(sqlCommand, conn);
+                            cmd.ExecuteNonQuery();
+                            fillTable();
+                        }
+                    }
+                }
+            }
+            catch { }
         }
         void DeleteGroup()
         {
+            try
+            {
+                if (dataGridView3.RowCount == 0)
+                {
+                    MessageBox.Show("Нечего удалять");
+                }
+                else
+                {
+                    DialogResult result = MessageBox.Show(
+                        "Вы действительно хотите удалить запись?",
+                        "Удаление записей",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        int indRow = dataGridView3.CurrentRow.Index;
+                        int idGroup = Convert.ToInt32(dataGridView3.Rows[indRow].Cells[0].Value);
+                        sqlCommand = $"DELETE FROM `event` WHERE fk_Group_Code = '{idGroup.ToString()}';";
+                        cmd = new(sqlCommand, conn);
+                        cmd.ExecuteNonQuery();
+                        sqlCommand = $"DELETE FROM `group` WHERE Group_code = '{idGroup.ToString()}';";
+                        cmd = new(sqlCommand, conn);
+                        cmd.ExecuteNonQuery();
+                        fillTable3();
 
+                    }
+                }
+            }
+            catch { }
+        }
+        void DeleteInvited()
+        {
+            if (dataGridView4.RowCount == 0)
+            {
+                MessageBox.Show("Нечего удалять");
+            }
+            else
+            {
+                DialogResult result = MessageBox.Show(
+                    "Вы действительно хотите удалить запись?",
+                    "Удаление записей",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    int indRow = dataGridView4.CurrentRow.Index;
+                    int idNumberPlan = Convert.ToInt32(dataGridView4.Rows[indRow].Cells[0].Value);
+                    int idPlayer = Convert.ToInt32(dataGridView4.Rows[indRow].Cells[1].Value);
+                    sqlCommand = $"DELETE FROM Inviting_participants WHERE fk_Number_plan = '{idNumberPlan.ToString()}' AND fk_Code_player = '{idPlayer.ToString()}';";
+                    cmd = new(sqlCommand, conn);
+                    cmd.ExecuteNonQuery();
+                    sqlCommand = $"DELETE FROM Invited_participants WHERE Code_player = '{idPlayer.ToString()}';";
+                    cmd = new(sqlCommand, conn);
+                    cmd.ExecuteNonQuery();
+                    fillTable4();
+                }
+            }
+        }
+        void DeleteEvent()
+        {
+            try
+            {
+                if (dataGridView2.RowCount == 0)
+                {
+                    MessageBox.Show("Нечего удалять");
+                }
+                else
+                {
+                    DialogResult result = MessageBox.Show(
+                        "Вы действительно хотите удалить запись?",
+                        "Удаление записей",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        int indRow = dataGridView2.CurrentRow.Index;
+                        int idGroup = Convert.ToInt32(dataGridView2.Rows[indRow].Cells[0].Value);
+                        int idNumber = Convert.ToInt32(dataGridView2.Rows[indRow].Cells[1].Value);
+                        sqlCommand = $"DELETE FROM `event` WHERE fk_Group_Code = '{idGroup.ToString()}' AND fk_Number_plan = '{idNumber.ToString()}';";
+                        cmd = new(sqlCommand, conn);
+                        cmd.ExecuteNonQuery();
+                        fillTable2();
+
+                    }
+                }
+            }
+            catch { }
         }
         struct tableStud
         {
@@ -437,9 +600,16 @@ JOIN Invited_participants ON Inviting_participants.fk_Code_player = Invited_part
                 conn = new MySqlConnection(connString);
 
                 conn.Open();
-                FIODayn.Text = OName;
+                fullNameUSER.Text = OName;
 
-                // поиск   searchManager = new DynamicSearch(conn, dataGridView1);
+                Instance = this;
+
+                System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer { Interval = 1000 };
+                timer.Tick += (sender, e) =>
+                {
+                    DateTS.Text = $"{DateTime.Now.ToLocalTime()}";
+                };
+                timer.Start();
 
                 if (Convert.ToInt32(ZRole) != 1 && Convert.ToInt32(ZRole) != 2)
                 {
@@ -774,6 +944,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             }
             if (tabControl1.SelectedIndex == 1)
             {
+                DeleteEvent();
             }
             if (tabControl1.SelectedIndex == 2)
             {
@@ -781,6 +952,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             }
             if (tabControl1.SelectedIndex == 3)
             {
+                DeleteInvited();
             }
         }
 
@@ -791,54 +963,19 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
 
         private void button15_Click(object sender, EventArgs e)
         {
-            if (dataGridView4.RowCount == 0)
-            {
-                MessageBox.Show("Нечего удалять");
-            }
-            else
-            {
-                DialogResult result = MessageBox.Show(
-                    "Вы действительно хотите удалить запись?",
-                    "Удаление записей",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    int indRow = dataGridView4.CurrentRow.Index;
-                    int idNumberPlan = Convert.ToInt32(dataGridView4.Rows[indRow].Cells[0].Value);
-                    int idPlayer = Convert.ToInt32(dataGridView4.Rows[indRow].Cells[1].Value);
-                    sqlCommand = $"DELETE FROM Invited_participants WHERE Code_player = '{idPlayer.ToString()}';";
-                    sqlCommand = $"DELETE FROM Inviting_participants WHERE fk_Number_plan = '{idNumberPlan.ToString()}' AND fk_Code_player = '{idPlayer.ToString()}'";
-                    cmd = new(sqlCommand, conn);
-                    cmd.ExecuteNonQuery();
-                    fillTable4();
-                }
-            }
+            DeleteInvited();
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            string searchText = txtSearch.Text.Trim();
 
-            // Для таблицы Educational_work_plan ищем по колонкам:
-            // The_direction_of_educational_work, EVENT, FIO_responsible_person
-            // поиск
-            /*searchManager.Search(
-                "Educational_work_plan",
-                new string[] {
-            "The_direction_of_educational_work",
-            "EVENT",
-            "FIO_responsible_person"
-                },
-                searchText
-            );*/
         }
 
         private string GenerateHTMLReport()
         {
             StringBuilder html = new StringBuilder();
 
-           
+
             html.AppendLine("<!DOCTYPE html>");
             html.AppendLine("<html lang=\"ru\">");
             html.AppendLine("<head>");
@@ -846,7 +983,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             html.AppendLine("<title>Отчёт куратора</title>");
             html.AppendLine("<style>");
 
-            
+
             html.AppendLine("body { font-family: 'Times New Roman', serif; font-size: 14pt; }");
 
             html.AppendLine("table { border-collapse: collapse; width: 100%; }");
@@ -858,7 +995,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             html.AppendLine("</head>");
             html.AppendLine("<body>");
 
-            
+
             string curatorFIO = "Не выбран";
             string groupName = "Не выбрана";
             string selectRabota = "Не выбрано";
@@ -869,12 +1006,12 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                 curatorFIO = selectedRow.Cells[1].Value?.ToString() ?? "Не указан";
                 groupName = selectedRow.Cells[2].Value?.ToString() ?? "Не указана";
             }
-            if (dataGridView1.SelectedRows.Count > 0) 
+            if (dataGridView1.SelectedRows.Count > 0)
             {
                 var selectedRow = dataGridView1.SelectedRows[0];
                 selectRabota = selectedRow.Cells[3].Value?.ToString() ?? "Не указано";
             }
-           
+
             html.AppendLine($"Отчёт куратора {curatorFIO} группы {groupName} о проделанной работе с {selectRabota}");
 
             html.AppendLine("<table>");
@@ -913,7 +1050,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             html.AppendLine("</tbody>");
             html.AppendLine("</table>");
 
-            
+
             html.AppendLine("<div class=\"curator-info\">");
             html.AppendLine(@"Дополнительная информация о проведенной воспитательной работе: При этом еженедельно
                               проводились беседы из цикла «Разговоры о важном» по следующим темам: 1. 165-летие со дня 
@@ -922,7 +1059,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                               мы вместе; 9. День матери; 10. Символы России; 11. Волонтёры России; 12. День Конституции; 13.
                               День Героев Отечества; 14. Новый год. Семейные праздники и мечты.");
 
-             
+
             html.AppendLine("<pre>Куратор___________________\t\t\t\t\t\t\tПодпись___________________</pre>");
             DateTime dateTime = DateTime.Now;
             html.AppendLine("<p>" + dateTime.ToString("dd.MM.yyyy") + "</p>");
@@ -944,6 +1081,16 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             }
 
             MessageBox.Show("Отчёт сохранён в " + filePath);
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            DeleteEvent();
         }
     }
 }

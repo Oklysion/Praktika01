@@ -141,17 +141,30 @@ namespace Praktika01Uvarov
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (txtLLogin.Text != "SSSR")
+            try
             {
-                sqlCommand = $"INSERT INTO Users (fullName, username, PASSWORD, role_FK) VALUES ('{txtFIO.Text}', '{txtLLogin.Text}', SHA2(@pass, 512), {RoleCombBox.SelectedValue.ToString()});";
-                cmd = new(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@pass", txtPas.Text.Trim().ToString());
-                cmd.ExecuteNonQuery();
-                fillTable();
+                if (txtFIO.Text == "" || txtFIO.Text == " " || txtLLogin.Text == "" || txtLLogin.Text == " " || txtPas.Text == "" || txtPas.Text == " " || RoleCombBox.SelectedItem == "" || RoleCombBox.SelectedItem == " " || RoleCombBox.Text == "" || RoleCombBox.SelectedItem == "" || RoleCombBox.SelectedItem == " ")
+                {
+                    MessageBox.Show("Заполните поля.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    if (txtLLogin.Text != "SSSR")
+                    {
+                        sqlCommand = $"INSERT INTO Users (fullName, username, PASSWORD, role_FK) VALUES ('{txtFIO.Text}', '{txtLLogin.Text}', SHA2(@pass, 512), {RoleCombBox.SelectedValue.ToString()});";
+                        cmd = new(sqlCommand, conn);
+                        cmd.Parameters.AddWithValue("@pass", txtPas.Text.Trim().ToString());
+                        cmd.ExecuteNonQuery();
+                        fillTable();
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Невозможно добавить пользователя: {SSSR}");
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show($"Невозможно добавить пользователя: {SSSR}");
             }
         }
 
@@ -258,6 +271,30 @@ namespace Praktika01Uvarov
                     }
                 }
             }
+        }
+
+        private void txtFIO_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (int)Keys.Space)
+                e.KeyChar = '\0';
+        }
+
+        private void txtPas_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (int)Keys.Space)
+                e.KeyChar = '\0';
+        }
+
+        private void txtLLogin_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (int)Keys.Space)
+                e.KeyChar = '\0';
+        }
+
+        private void RoleCombBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (int)Keys.Space)
+                e.KeyChar = '\0';
         }
     }
 }
