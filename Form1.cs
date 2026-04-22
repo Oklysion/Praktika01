@@ -47,8 +47,8 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                     }
                     else
                     {
-                        sqlCommand = @"INSERT INTO Educational_work_plan (The_direction_of_educational_work, Educational_work_plan.`EVENT`, Dates_event, FIO_responsible_person, A_note_about_the_event)
-                VALUES ('" + thisPlanVospitat.txtNaprav.Text + "', '" + thisPlanVospitat.txtNazvan.Text + "', '" + thisPlanVospitat.txtSroki.Text + "', '" + thisPlanVospitat.txtFIOOtvet.Text + "', '" + thisPlanVospitat.dtTashkent.Value.ToString("yyyy") + "');";
+                        sqlCommand = @"START TRANSACTION; INSERT INTO Educational_work_plan (The_direction_of_educational_work, Educational_work_plan.`EVENT`, Dates_event, FIO_responsible_person, A_note_about_the_event)
+                VALUES ('" + thisPlanVospitat.txtNaprav.Text + "', '" + thisPlanVospitat.txtNazvan.Text + "', '" + thisPlanVospitat.txtSroki.Text + "', '" + thisPlanVospitat.txtFIOOtvet.Text + "', '" + thisPlanVospitat.dtTashkent.Value.ToString("yyyy") + "'); COMMIT;";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.ExecuteNonQuery();
                         fillTable();
@@ -71,8 +71,8 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                     }
                     else
                     {
-                        sqlCommand = @"INSERT INTO `Event` (fk_Number_plan, fk_Group_Code, Event_Location, The_main_participants, Event_content, Date_Event) 
-                VALUES (' " + events.NameCB.SelectedValue + "', '" + events.EventNameCB.SelectedValue + "', '" + events.txtMesto.Text + "', '" + events.txtOsn.Text + "', '" + events.txtKratko.Text + "', '" + events.dtDate.Value.ToString("yyyy-MM-dd") + "');";
+                        sqlCommand = @"START TRANSACTION; INSERT INTO `Event` (fk_Number_plan, fk_Group_Code, Event_Location, The_main_participants, Event_content, Date_Event) 
+                VALUES (' " + events.NameCB.SelectedValue + "', '" + events.EventNameCB.SelectedValue + "', '" + events.txtMesto.Text + "', '" + events.txtOsn.Text + "', '" + events.txtKratko.Text + "', '" + events.dtDate.Value.ToString("yyyy-MM-dd") + "'); COMMIT;";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.ExecuteNonQuery();
                         fillTable2();
@@ -95,8 +95,8 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                     }
                     else
                     {
-                        sqlCommand = @"INSERT INTO `group` (FIO_curator, Group_Name)
-                VALUES ('" + groups.txtFIO.Text + "', '" + groups.txtNameGroup.Text + "');";
+                        sqlCommand = @"START TRANSACTION; INSERT INTO `group` (FIO_curator, Group_Name)
+                VALUES ('" + groups.txtFIO.Text + "', '" + groups.txtNameGroup.Text + "'); COMMIT;";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.ExecuteNonQuery();
                         fillTable3();
@@ -119,12 +119,12 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                     }
                     else
                     {
-                        sqlCommand = @"INSERT INTO Invited_participants (FIO_invited, Post, Org_name)
-                VALUES ('" + addInvitedPeople.txtFIO.Text + "', '" + addInvitedPeople.txtPost.Text + "', '" + addInvitedPeople.txtOrgName.Text + "');";
+                        sqlCommand = @"START TRANSACTION; INSERT INTO Invited_participants (FIO_invited, Post, Org_name)
+                VALUES ('" + addInvitedPeople.txtFIO.Text + "', '" + addInvitedPeople.txtPost.Text + "', '" + addInvitedPeople.txtOrgName.Text + "'); COMMIT;";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.ExecuteNonQuery();
-                        sqlCommand = @"INSERT INTO Inviting_participants (fk_Number_plan, fk_Code_player)
-                VALUES ( " + addInvitedPeople.EventsCB.SelectedValue + ", " + "LAST_INSERT_ID())";
+                        sqlCommand = @"START TRANSACTION; INSERT INTO Inviting_participants (fk_Number_plan, fk_Code_player)
+                VALUES ( " + addInvitedPeople.EventsCB.SelectedValue + ", " + "LAST_INSERT_ID()); COMMIT;";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.ExecuteNonQuery();
                         fillTable4();

@@ -120,6 +120,7 @@
             // 
             // dtDate
             // 
+            dtDate.Format = DateTimePickerFormat.Short;
             dtDate.Location = new Point(12, 405);
             dtDate.Name = "dtDate";
             dtDate.Size = new Size(330, 23);
