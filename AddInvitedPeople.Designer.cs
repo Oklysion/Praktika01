@@ -98,6 +98,7 @@
             // 
             txtFIO.Location = new Point(12, 38);
             txtFIO.Name = "txtFIO";
+            txtFIO.PlaceholderText = "Фамилия Имя Отчество*";
             txtFIO.Size = new Size(330, 23);
             txtFIO.TabIndex = 5;
             // 
@@ -105,6 +106,7 @@
             // 
             txtPost.Location = new Point(12, 97);
             txtPost.Name = "txtPost";
+            txtPost.PlaceholderText = "Должность*";
             txtPost.Size = new Size(330, 23);
             txtPost.TabIndex = 6;
             // 
@@ -112,6 +114,7 @@
             // 
             txtOrgName.Location = new Point(12, 155);
             txtOrgName.Name = "txtOrgName";
+            txtOrgName.PlaceholderText = "Название организации*";
             txtOrgName.Size = new Size(330, 23);
             txtOrgName.TabIndex = 7;
             // 

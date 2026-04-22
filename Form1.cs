@@ -1,15 +1,6 @@
 using ArchiveFund;
-using Microsoft.VisualBasic.ApplicationServices;
 using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI.Common;
-using MySqlX.XDevAPI.Relational;
-using Org.BouncyCastle.Utilities.Bzip2;
-using System;
-using System.Data;
 using System.Text;
-using System.Windows.Forms;
-using System.Windows.Forms.Design;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace Praktika01Uvarov
 {
@@ -41,8 +32,8 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             fillTable2();
             ContextFilter.ResetFilter(dataGridView2, contextFilterItem);
         }
-        
-       public void AddVospPlan()
+
+        public void AddVospPlan()
         {
             try
             {
@@ -57,7 +48,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                     else
                     {
                         sqlCommand = @"INSERT INTO Educational_work_plan (The_direction_of_educational_work, Educational_work_plan.`EVENT`, Dates_event, FIO_responsible_person, A_note_about_the_event)
-                VALUES ('" + thisPlanVospitat.txtNaprav.Text + "', '" + thisPlanVospitat.txtNazvan.Text + "', '" + thisPlanVospitat.txtSroki.Text + "', '" + thisPlanVospitat.txtFIOOtvet.Text + "', '" + thisPlanVospitat.dtTashkent.Value.ToString("yyyy-MM-dd") + "');";
+                VALUES ('" + thisPlanVospitat.txtNaprav.Text + "', '" + thisPlanVospitat.txtNazvan.Text + "', '" + thisPlanVospitat.txtSroki.Text + "', '" + thisPlanVospitat.txtFIOOtvet.Text + "', '" + thisPlanVospitat.dtTashkent.Value.ToString("yyyy") + "');";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.ExecuteNonQuery();
                         fillTable();
@@ -66,10 +57,11 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             }
             catch { }
         }
-       public void AddEvents()
+        public void AddEvents()
         {
-            try { 
-            Events events = new Events();
+            try
+            {
+                Events events = new Events();
                 if (events.ShowDialog() == DialogResult.OK)
                 {
                     if (events.NameCB.SelectedItem == "" || events.NameCB.SelectedItem == " " || events.EventNameCB.SelectedItem == "" || events.EventNameCB.SelectedItem == " " || events.txtMesto.Text == " " || events.txtMesto.Text == " " || events.txtOsn.Text == "" || events.txtOsn.Text == " " || events.txtKratko.Text == "" || events.txtKratko.Text == " ")
@@ -89,7 +81,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             }
             catch { }
         }
-       public void AddGroups()
+        public void AddGroups()
         {
             try
             {
@@ -113,7 +105,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
             }
             catch { }
         }
-       public void AddInvited()
+        public void AddInvited()
         {
             try
             {
@@ -271,7 +263,7 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
                     n3 = thisPlanVospitat.txtSroki.Text;
                     n4 = thisPlanVospitat.txtFIOOtvet.Text;
                     sqlCommand = "UPDATE Educational_work_plan SET ";
-                    sqlCommand += "The_direction_of_educational_work = '" + n1 + "', EVENT = '" + n2 + "', Dates_event = '" + n3 + "', FIO_responsible_person = '" + n4 + "', A_note_about_the_event = '" + thisPlanVospitat.dtTashkent.Value.ToString("yyyy-MM-dd") + "'";
+                    sqlCommand += "The_direction_of_educational_work = '" + n1 + "', EVENT = '" + n2 + "', Dates_event = '" + n3 + "', FIO_responsible_person = '" + n4 + "', A_note_about_the_event = '" + thisPlanVospitat.dtTashkent.Value.ToString("yyyy") + "'";
                     sqlCommand += " WHERE Number_plan = " + idStud.ToString() + ";";
                     cmd = new MySqlCommand(sqlCommand, conn);
                     cmd.ExecuteNonQuery();
@@ -541,7 +533,7 @@ JOIN Invited_participants ON Inviting_participants.fk_Code_player = Invited_part
                 dataGridView1.Rows[i].Cells[2].Value = tbStud[i].edName;
                 dataGridView1.Rows[i].Cells[3].Value = tbStud[i].edDate;
                 dataGridView1.Rows[i].Cells[4].Value = tbStud[i].edOtvetst;
-                dataGridView1.Rows[i].Cells[5].Value = DateTime.Parse(tbStud[i].edDateProved).ToString("dd.MM.yyyy");
+                dataGridView1.Rows[i].Cells[5].Value = tbStud[i].edDateProved.ToString();
             }
         }
         void fillTable2()
@@ -987,23 +979,46 @@ JOIN Educational_work_plan ON Educational_work_plan.Number_plan = `Event`.fk_Num
         {
             string search = txtSearch.Text.Trim();
 
-            string sql = @"
-SELECT
-    p.Number_plan,
-    p.The_direction_of_educational_work AS Направление_образовательной_работы,
-    p.EVENT AS Мероприятие,
-    p.Dates_event AS Дата_мероприятия,
-    p.FIO_responsible_person AS ФИО_ответственного,
-    p.A_note_about_the_event AS Примечание_о_мероприятии
-FROM Educational_work_plan p
+            string sql = @"SELECT
+    E.Number_plan AS 'Номер плана',
+    E.The_direction_of_educational_work AS 'Направление_образовательной_работы',
+    E.EVENT AS 'Мероприятие',
+    E.Dates_event AS 'Дата_мероприятия',
+    E.FIO_responsible_person AS 'ФИО_ответственного',
+    E.A_note_about_the_event AS 'Примечание_о_мероприятии'
+FROM `Event` p
+JOIN `group` g ON g.Group_code = p.fk_Group_Code
+JOIN `Educational_work_plan` E ON E.Number_plan = p.fk_Number_plan
 WHERE
-    (@Search = '' OR
-    p.The_direction_of_educational_work LIKE CONCAT('%', @Search, '%') OR
-    p.EVENT LIKE CONCAT('%', @Search, '%') OR
-    p.Dates_event LIKE CONCAT('%', @Search, '%') OR
-    p.FIO_responsible_person LIKE CONCAT('%', @Search, '%') OR
-    p.A_note_about_the_event LIKE CONCAT('%', @Search, '%'))
-ORDER BY p.Number_plan DESC;";
+    @Search = ''
+    OR (
+        CONCAT(
+            E.The_direction_of_educational_work, ' ',
+            E.EVENT, ' ',
+            E.Dates_event, ' ',
+            E.FIO_responsible_person, ' ',
+            E.A_note_about_the_event
+        ) LIKE CONCAT('%', TRIM(SUBSTRING_INDEX(@Search, ',', 1)), '%')
+        AND
+        CONCAT(
+            E.The_direction_of_educational_work, ' ',
+            E.EVENT, ' ',
+            E.Dates_event, ' ',
+            E.FIO_responsible_person, ' ',
+            E.A_note_about_the_event
+        ) LIKE CONCAT('%', TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(@Search, ',', 2), ',', -1)), '%')
+        AND
+        CONCAT(
+            E.The_direction_of_educational_work, ' ',
+            E.EVENT, ' ',
+            E.Dates_event, ' ',
+            E.FIO_responsible_person, ' ',
+            E.A_note_about_the_event
+        ) LIKE CONCAT('%', TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(@Search, ',', 3), ',', -1)), '%')
+    )
+ORDER BY E.Number_plan DESC;
+
+";
 
             cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@Search", search);
@@ -1015,10 +1030,9 @@ ORDER BY p.Number_plan DESC;";
             while (reader.Read())
             {
                 int row = dataGridView1.Rows.Add();
-                dataGridView1.Rows[row].Cells[0].Value = reader["Number_plan"];
                 dataGridView1.Rows[row].Cells[1].Value = reader["Направление_образовательной_работы"].ToString();
                 dataGridView1.Rows[row].Cells[2].Value = reader["Мероприятие"].ToString();
-                dataGridView1.Rows[row].Cells[5].Value = Convert.ToDateTime(reader["Примечание_о_мероприятии"]).ToString("yyyy.MM.dd");
+                dataGridView1.Rows[row].Cells[5].Value = reader["Примечание_о_мероприятии"].ToString();
                 dataGridView1.Rows[row].Cells[4].Value = reader["ФИО_ответственного"].ToString();
                 dataGridView1.Rows[row].Cells[3].Value = reader["Дата_мероприятия"].ToString();
             }
@@ -1029,55 +1043,51 @@ ORDER BY p.Number_plan DESC;";
             string search = txtSearch.Text.Trim();
 
             string sql = @"SELECT
-    E.`EVENT` AS 'Мероприятие',
-    g.Group_Name AS 'Группа',
-    p.Event_Location,
-    p.The_main_participants,
-    p.Event_content,
-    p.Date_Event
-FROM `Event` p
-JOIN `group` g ON g.Group_code = p.fk_Group_Code
-JOIN Educational_work_plan E ON E.Number_plan = p.fk_Number_plan
-WHERE
-    @Search = ''
-    OR (
-        -- Объединяем все поля и ищем первую часть
-        CONCAT(
-            g.Group_Name, ' ',
-            p.Event_Location, ' ',
-            p.The_main_participants, ' ',
-            p.Event_content, ' ',
-            E.`EVENT`, ' ',
-            p.Date_Event
-        ) LIKE CONCAT('%', TRIM(SUBSTRING_INDEX(@Search, ',', 1)), '%')
-        OR
-        -- Ищем вторую часть
-        CONCAT(
-            g.Group_Name, ' ',
-            p.Event_Location, ' ',
-            p.The_main_participants, ' ',
-            p.Event_content, ' ',
-            E.`EVENT`, ' ',
-            p.Date_Event
-        ) LIKE CONCAT('%', TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(@Search, ',', 2), ',', -1)), '%')
-        OR
-        -- Ищем третью часть (аналогично)
-        CONCAT(
-            g.Group_Name, ' ',
-            p.Event_Location, ' ',
-            p.The_main_participants, ' ',
-            p.Event_content, ' ',
-            E.`EVENT`, ' ',
-            p.Date_Event
-        ) LIKE CONCAT('%', TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(@Search, ',', 3), ',', -1)), '%')
-    )
-ORDER BY p.fk_Number_plan DESC;
-";
+     E.`EVENT` AS 'Мероприятие',
+     g.Group_Name AS 'Группа',
+     p.Event_Location,
+     p.The_main_participants,
+     p.Event_content,
+     p.Date_Event
+ FROM `Event` p
+ JOIN `group` g ON g.Group_code = p.fk_Group_Code
+ JOIN Educational_work_plan E ON E.Number_plan = p.fk_Number_plan
+ WHERE
+     @Search = ''
+     OR (
+         CONCAT(
+             g.Group_Name, ' ',
+             p.Event_Location, ' ',
+             p.The_main_participants, ' ',
+             p.Event_content, ' ',
+             E.`EVENT`, ' ',
+             p.Date_Event
+         ) LIKE CONCAT('%', TRIM(SUBSTRING_INDEX(@Search, ',', 1)), '%')
+         AND
+         CONCAT(
+             g.Group_Name, ' ',
+             p.Event_Location, ' ',
+             p.The_main_participants, ' ',
+             p.Event_content, ' ',
+             E.`EVENT`, ' ',
+             p.Date_Event
+         ) LIKE CONCAT('%', TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(@Search, ',', 2), ',', -1)), '%')
+         AND
+         CONCAT(
+             g.Group_Name, ' ',
+             p.Event_Location, ' ',
+             p.The_main_participants, ' ',
+             p.Event_content, ' ',
+             E.`EVENT`, ' ',
+             p.Date_Event
+         ) LIKE CONCAT('%', TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(@Search, ',', 3), ',', -1)), '%')
+     )
+ ORDER BY p.fk_Number_plan DESC;";
 
             cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@Search", search);
 
-             rdr = cmd.ExecuteReader();
+            rdr = cmd.ExecuteReader();
 
             dataGridView2.Rows.Clear();
 
@@ -1105,7 +1115,6 @@ t.Group_Name
 FROM `group` t
 WHERE
 (@Search = '' OR
-t.Group_code LIKE CONCAT('%', @Search, '%') OR
 t.FIO_curator LIKE CONCAT('%', @Search, '%') OR
 t.Group_Name LIKE CONCAT('%', @Search, '%'))
 ORDER BY t.Group_code DESC";
@@ -1140,7 +1149,6 @@ JOIN Inviting_participants ig ON t.Code_player = ig.fk_Code_player
 JOIN Educational_work_plan E ON E.Number_plan = ig.fk_Number_plan
 WHERE
     (@Search = '' OR
-    t.Code_player LIKE CONCAT('%', @Search, '%') OR
     E.`EVENT` LIKE CONCAT('%', @Search, '%') OR
     t.FIO_invited LIKE CONCAT('%', @Search, '%') OR
     t.Post LIKE CONCAT('%', @Search, '%') OR
@@ -1182,7 +1190,7 @@ ORDER BY t.Code_player DESC;";
             {
                 SearchInvited();
             }
-            
+
         }
 
         private string GenerateHTMLReport()

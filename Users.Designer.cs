@@ -125,7 +125,7 @@
             // 
             txtPas.Location = new Point(325, 96);
             txtPas.Name = "txtPas";
-            txtPas.PlaceholderText = "Пароль";
+            txtPas.PlaceholderText = "Пароль*";
             txtPas.Size = new Size(261, 23);
             txtPas.TabIndex = 5;
             txtPas.KeyPress += txtPas_KeyPress;
@@ -134,7 +134,7 @@
             // 
             txtLLogin.Location = new Point(325, 53);
             txtLLogin.Name = "txtLLogin";
-            txtLLogin.PlaceholderText = "Логин";
+            txtLLogin.PlaceholderText = "Логин*";
             txtLLogin.Size = new Size(261, 23);
             txtLLogin.TabIndex = 6;
             txtLLogin.KeyPress += txtLLogin_KeyPress;
@@ -175,7 +175,7 @@
             // 
             txtFIO.Location = new Point(325, 12);
             txtFIO.Name = "txtFIO";
-            txtFIO.PlaceholderText = "Фамилия Имя Отчество";
+            txtFIO.PlaceholderText = "Фамилия Имя Отчество*";
             txtFIO.Size = new Size(260, 23);
             txtFIO.TabIndex = 10;
             txtFIO.KeyPress += txtFIO_KeyPress;

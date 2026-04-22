@@ -31,12 +31,6 @@
             components = new System.ComponentModel.Container();
             txtSearch = new TextBox();
             dataGridView1 = new DataGridView();
-            IDNumber = new DataGridViewTextBoxColumn();
-            Направление = new DataGridViewTextBoxColumn();
-            Название = new DataGridViewTextBoxColumn();
-            Срокипроведения = new DataGridViewTextBoxColumn();
-            Ответственный = new DataGridViewTextBoxColumn();
-            Датапроведения = new DataGridViewTextBoxColumn();
             AddEditDelete = new ContextMenuStrip(components);
             AddPlan = new ToolStripMenuItem();
             EditPlan = new ToolStripMenuItem();
@@ -112,6 +106,12 @@
             fullNameUSER = new ToolStripLabel();
             toolStripSeparator3 = new ToolStripSeparator();
             DateTS = new ToolStripLabel();
+            IDNumber = new DataGridViewTextBoxColumn();
+            Направление = new DataGridViewTextBoxColumn();
+            Название = new DataGridViewTextBoxColumn();
+            Срокипроведения = new DataGridViewTextBoxColumn();
+            Ответственный = new DataGridViewTextBoxColumn();
+            Учебныйгод = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             AddEditDelete.SuspendLayout();
             tabControl1.SuspendLayout();
@@ -146,7 +146,7 @@
             // 
             txtSearch.Location = new Point(2, 27);
             txtSearch.Name = "txtSearch";
-            txtSearch.PlaceholderText = "Поиск";
+            txtSearch.PlaceholderText = "Поиск...";
             txtSearch.Size = new Size(794, 23);
             txtSearch.TabIndex = 0;
             txtSearch.TextChanged += txtSearch_TextChanged;
@@ -157,7 +157,7 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { IDNumber, Направление, Название, Срокипроведения, Ответственный, Датапроведения });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { IDNumber, Направление, Название, Срокипроведения, Ответственный, Учебныйгод });
             dataGridView1.ContextMenuStrip = AddEditDelete;
             dataGridView1.Location = new Point(0, 0);
             dataGridView1.Name = "dataGridView1";
@@ -166,48 +166,6 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(792, 272);
             dataGridView1.TabIndex = 1;
-            // 
-            // IDNumber
-            // 
-            IDNumber.HeaderText = "IDNumber";
-            IDNumber.Name = "IDNumber";
-            IDNumber.ReadOnly = true;
-            IDNumber.Visible = false;
-            // 
-            // Направление
-            // 
-            Направление.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Направление.HeaderText = "Направление";
-            Направление.Name = "Направление";
-            Направление.ReadOnly = true;
-            // 
-            // Название
-            // 
-            Название.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Название.HeaderText = "Название";
-            Название.Name = "Название";
-            Название.ReadOnly = true;
-            // 
-            // Срокипроведения
-            // 
-            Срокипроведения.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Срокипроведения.HeaderText = "Сроки проведения";
-            Срокипроведения.Name = "Срокипроведения";
-            Срокипроведения.ReadOnly = true;
-            // 
-            // Ответственный
-            // 
-            Ответственный.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Ответственный.HeaderText = "Ответственный";
-            Ответственный.Name = "Ответственный";
-            Ответственный.ReadOnly = true;
-            // 
-            // Датапроведения
-            // 
-            Датапроведения.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Датапроведения.HeaderText = "Дата проведения";
-            Датапроведения.Name = "Датапроведения";
-            Датапроведения.ReadOnly = true;
             // 
             // AddEditDelete
             // 
@@ -1011,6 +969,48 @@
             DateTS.RightToLeft = RightToLeft.No;
             DateTS.Size = new Size(0, 22);
             // 
+            // IDNumber
+            // 
+            IDNumber.HeaderText = "IDNumber";
+            IDNumber.Name = "IDNumber";
+            IDNumber.ReadOnly = true;
+            IDNumber.Visible = false;
+            // 
+            // Направление
+            // 
+            Направление.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Направление.HeaderText = "Направление";
+            Направление.Name = "Направление";
+            Направление.ReadOnly = true;
+            // 
+            // Название
+            // 
+            Название.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Название.HeaderText = "Название";
+            Название.Name = "Название";
+            Название.ReadOnly = true;
+            // 
+            // Срокипроведения
+            // 
+            Срокипроведения.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Срокипроведения.HeaderText = "Сроки проведения";
+            Срокипроведения.Name = "Срокипроведения";
+            Срокипроведения.ReadOnly = true;
+            // 
+            // Ответственный
+            // 
+            Ответственный.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Ответственный.HeaderText = "Ответственный";
+            Ответственный.Name = "Ответственный";
+            Ответственный.ReadOnly = true;
+            // 
+            // Учебныйгод
+            // 
+            Учебныйгод.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Учебныйгод.HeaderText = "Учебный год";
+            Учебныйгод.Name = "Учебныйгод";
+            Учебныйгод.ReadOnly = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1117,12 +1117,6 @@
         private DataGridViewTextBoxColumn IDGroup;
         private DataGridViewTextBoxColumn ФИОКуратора;
         private DataGridViewTextBoxColumn Названиегруппы;
-        private DataGridViewTextBoxColumn IDNumber;
-        private DataGridViewTextBoxColumn Направление;
-        private DataGridViewTextBoxColumn Название;
-        private DataGridViewTextBoxColumn Срокипроведения;
-        private DataGridViewTextBoxColumn Ответственный;
-        private DataGridViewTextBoxColumn Датапроведения;
         private DataGridViewTextBoxColumn IDNumberInv;
         private DataGridViewTextBoxColumn IDplayer;
         private DataGridViewTextBoxColumn МероприятиеПРИГ;
@@ -1147,5 +1141,11 @@
         private PictureBox pictureBox3;
         private PictureBox pictureBox2;
         private PictureBox pictureBox1;
+        private DataGridViewTextBoxColumn IDNumber;
+        private DataGridViewTextBoxColumn Направление;
+        private DataGridViewTextBoxColumn Название;
+        private DataGridViewTextBoxColumn Срокипроведения;
+        private DataGridViewTextBoxColumn Ответственный;
+        private DataGridViewTextBoxColumn Учебныйгод;
     }
 }

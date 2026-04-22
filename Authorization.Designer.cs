@@ -44,7 +44,7 @@
             // 
             txtLogin.Location = new Point(53, 27);
             txtLogin.Name = "txtLogin";
-            txtLogin.PlaceholderText = "Логин";
+            txtLogin.PlaceholderText = "Логин*";
             txtLogin.Size = new Size(217, 23);
             txtLogin.TabIndex = 1;
             // 
@@ -53,7 +53,7 @@
             txtPass.Location = new Point(53, 75);
             txtPass.Name = "txtPass";
             txtPass.PasswordChar = '*';
-            txtPass.PlaceholderText = "Пароль";
+            txtPass.PlaceholderText = "Пароль*";
             txtPass.Size = new Size(217, 23);
             txtPass.TabIndex = 2;
             // 

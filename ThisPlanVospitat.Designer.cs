@@ -108,7 +108,7 @@
             // 
             txtNaprav.Location = new Point(12, 29);
             txtNaprav.Name = "txtNaprav";
-            txtNaprav.PlaceholderText = "Направление воспитательной работы";
+            txtNaprav.PlaceholderText = "Направление воспитательной работы*";
             txtNaprav.Size = new Size(330, 23);
             txtNaprav.TabIndex = 12;
             // 
@@ -116,7 +116,7 @@
             // 
             txtNazvan.Location = new Point(12, 92);
             txtNazvan.Name = "txtNazvan";
-            txtNazvan.PlaceholderText = "Название мероприятия";
+            txtNazvan.PlaceholderText = "Название мероприятия*";
             txtNazvan.Size = new Size(330, 23);
             txtNazvan.TabIndex = 13;
             // 
@@ -124,7 +124,7 @@
             // 
             txtSroki.Location = new Point(12, 157);
             txtSroki.Name = "txtSroki";
-            txtSroki.PlaceholderText = "Сроки проведения";
+            txtSroki.PlaceholderText = "Сроки проведения*";
             txtSroki.Size = new Size(330, 23);
             txtSroki.TabIndex = 14;
             // 
@@ -132,7 +132,7 @@
             // 
             txtFIOOtvet.Location = new Point(12, 224);
             txtFIOOtvet.Name = "txtFIOOtvet";
-            txtFIOOtvet.PlaceholderText = "ФИО ответственного";
+            txtFIOOtvet.PlaceholderText = "ФИО ответственного*";
             txtFIOOtvet.Size = new Size(330, 23);
             txtFIOOtvet.TabIndex = 15;
             // 
@@ -148,6 +148,7 @@
             // 
             // dtTashkent
             // 
+            dtTashkent.CustomFormat = "yyyy";
             dtTashkent.Location = new Point(12, 289);
             dtTashkent.Name = "dtTashkent";
             dtTashkent.Size = new Size(330, 23);

@@ -64,6 +64,7 @@
             // 
             txtFIO.Location = new Point(12, 29);
             txtFIO.Name = "txtFIO";
+            txtFIO.PlaceholderText = "Фамилия Имя Отчество куратора*";
             txtFIO.Size = new Size(330, 23);
             txtFIO.TabIndex = 4;
             // 
@@ -91,6 +92,7 @@
             // 
             txtNameGroup.Location = new Point(12, 90);
             txtNameGroup.Name = "txtNameGroup";
+            txtNameGroup.PlaceholderText = "Название группы*";
             txtNameGroup.Size = new Size(330, 23);
             txtNameGroup.TabIndex = 7;
             // 
