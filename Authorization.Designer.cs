@@ -47,6 +47,7 @@
             txtLogin.PlaceholderText = "Логин*";
             txtLogin.Size = new Size(217, 23);
             txtLogin.TabIndex = 1;
+            txtLogin.Text = "SSSR";
             // 
             // txtPass
             // 
@@ -56,6 +57,7 @@
             txtPass.PlaceholderText = "Пароль*";
             txtPass.Size = new Size(217, 23);
             txtPass.TabIndex = 2;
+            txtPass.Text = "holaZIP";
             // 
             // pictureBox1
             // 
